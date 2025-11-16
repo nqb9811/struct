@@ -1,0 +1,35 @@
+{
+    "name": "@gyra/struct",
+    "version": "1.0.4",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "Data Structure"
+    ],
+    "author": {
+        "name": "Bao Nguyen",
+        "email": "nqb9811@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nqb9811/struct.git"
+    },
+    "bugs": {
+        "url": "https://github.com/nqb9811/struct/issues"
+    },
+    "homepage": "https://github.com/nqb9811/struct#readme",
+    "license": "MIT",
+    "description": "JS/TS common data structures",
+    "devDependencies": {
+        "@types/node": "^24.8.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    }
+}
