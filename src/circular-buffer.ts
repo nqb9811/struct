@@ -88,4 +88,42 @@ export class CircularBuffer<T = any> {
         this.tail = 0;
         this.length = 0;
     }
+
+    /** Remove an item if present in buffer. */
+    public remove(item: T) {
+        const length = this.length;
+        if (!length) {
+            return;
+        }
+        const items = this.items;
+        const capacity = this.capacity;
+        let head = this.head;
+        for (let i = 0; i < length; i++) {
+            const idx = (head + i) % capacity;
+            if (items[idx] === item) {
+                for (let j = i; j < length - 1; j++) {
+                    const from = (head + j + 1) % capacity;
+                    const to = (head + j) % capacity;
+                    items[to] = items[from];
+                }
+                this.tail = (this.tail - 1 + capacity) % capacity;
+                this.length--;
+                return;
+            }
+        }
+    }
+
+    /** Return all buffered items in an array. */
+    public toArray() {
+        const length = this.length;
+        const capacity = this.capacity;
+        const head = this.head;
+        const items = this.items;
+        const arr = new Array<T>(length);
+        for (let i = 0; i < length; i++) {
+            const idx = (head + i) % capacity;
+            arr[i] = items[idx];
+        }
+        return arr;
+    }
 }

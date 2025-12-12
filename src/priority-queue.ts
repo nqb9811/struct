@@ -1,32 +1,29 @@
 /** Priority queue data structure based on binary min heap (lower value means higher priority). */
 export class PriorityQueue<T = any> {
     private items: T[] = [];
-    private length = 0;
 
     constructor(private compare: (a: T, b: T) => number) { }
 
     /** Get number of items in queue. */
     public len() {
-        return this.length;
+        return this.items.length;
     }
 
     /** Add new item to queue. */
     public push(item: T) {
         this.items.push(item);
-        this.length++;
-        this.siftUp(this.length - 1);
+        this.siftUp(this.items.length - 1);
     }
 
     /** Get the most prioritized item and remove it from queue. */
     public pop() {
-        if (!this.length) {
+        const items = this.items;
+        if (!items.length) {
             return undefined;
         }
-        const items = this.items;
         const top = items[0];
         const last = items.pop()!;
-        this.length--;
-        if (this.length) {
+        if (items.length) {
             this.siftDown(0, last);
         }
         return top;
@@ -34,7 +31,7 @@ export class PriorityQueue<T = any> {
 
     /** Get the most prioritized item but do not remove it from queue. */
     public peek() {
-        if (!this.length) {
+        if (!this.items.length) {
             return undefined;
         }
         return this.items[0];
@@ -43,7 +40,29 @@ export class PriorityQueue<T = any> {
     /** Clear all items in queue. */
     public clear() {
         this.items = [];
-        this.length = 0;
+    }
+
+    /** Remove an item if present in queue. */
+    public remove(item: T) {
+        const items = this.items;
+        const length = items.length;
+        for (let i = 0; i < length; i++) {
+            const it = items[i];
+            if (it === item) {
+                const last = items.pop()!;
+                if (it !== last) {
+                    items[i] = last;
+                    this.siftDown(i, last);
+                    this.siftUp(i);
+                }
+                return;
+            }
+        }
+    }
+
+    /** Return all queued items in an array. */
+    public toArray() {
+        return this.items;
     }
 
     /** Maintain heap property after adding new item. */
@@ -64,27 +83,27 @@ export class PriorityQueue<T = any> {
 
     /** Maintain heap property after removing an item. */
     private siftDown(index: number, item: T) {
-        const data = this.items;
-        const length = this.length;
+        const items = this.items;
+        const length = items.length;
         const compare = this.compare;
         while (true) {
             const left = (index << 1) + 1;
             const right = left + 1;
             let smallest = index;
-            if (left < length && compare(data[left], item) < 0) {
+            if (left < length && compare(items[left], item) < 0) {
                 smallest = left;
-                if (right < length && compare(data[right], item) < 0) {
+                if (right < length && compare(items[right], item) < 0) {
                     smallest = right;
                 }
-            } else if (right < length && compare(data[right], item) < 0) {
+            } else if (right < length && compare(items[right], item) < 0) {
                 smallest = right;
             }
             if (smallest === index) {
                 break;
             }
-            data[index] = data[smallest];
+            items[index] = items[smallest];
             index = smallest;
         }
-        data[index] = item;
+        items[index] = item;
     }
 }

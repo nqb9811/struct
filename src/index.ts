@@ -1,3 +1,3 @@
-export { CircularBuffer } from './circular-buffer';
-export { PriorityQueue } from './priority-queue';
-export { Queue } from './queue';
+export * from './circular-buffer';
+export * from './priority-queue';
+export * from './queue';

@@ -12,7 +12,7 @@ export class Queue<T = any> {
     /** Add new item to queue. */
     public push(item: T) {
         this.items.push(item);
-        this.length = this.items.length - this.head;
+        this.length++;
     }
 
     /** Get next item and remove it from queue. */
@@ -30,7 +30,7 @@ export class Queue<T = any> {
         } else {
             this.head = head + 1;
         }
-        this.length = this.items.length - this.head;
+        this.length--;
         return item;
     }
 
@@ -47,5 +47,24 @@ export class Queue<T = any> {
         this.items = [];
         this.head = 0;
         this.length = 0;
+    }
+
+    /** Remove an item if present in queue. */
+    public remove(item: T) {
+        const items = this.items;
+        const head = this.head;
+        const length = items.length;
+        for (let i = head; i < length; i++) {
+            if (items[i] === item) {
+                items.splice(i, 1);
+                this.length--;
+                return;
+            }
+        }
+    }
+
+    /** Return all queued items in an array. */
+    public toArray() {
+        return this.items.slice(this.head);
     }
 }

@@ -51,10 +51,53 @@ function shouldClearItems() {
     assert(pq.peek() === undefined, 'Peek should return undefined after clear');
 }
 
+function shouldRemoveItem() {
+    type Item = { priority: number; value: string; };
+    const pq = new PriorityQueue<Item>((a, b) => a.priority - b.priority);
+    const a = { priority: 5, value: 'a' };
+    const b = { priority: 2, value: 'b' };
+    const c = { priority: 8, value: 'c' };
+    const d = { priority: 3, value: 'd' };
+    pq.push(a);
+    pq.push(b);
+    pq.push(c);
+    pq.push(d);
+    assert(pq.len() === 4, 'Length should be 4 before removal');
+    pq.remove(d);
+    assert(pq.len() === 3, 'Length should be 3 after removal');
+    const values: string[] = [];
+    let item: Item | undefined;
+    while ((item = pq.pop())) {
+        values.push(item.value);
+    }
+    assert(
+        values.join(',') === 'b,a,c',
+        'Remaining items should pop in correct priority order'
+    );
+}
+
+function shouldReturnArrayOfItems() {
+    type Item = { priority: number; value: string; };
+    const pq = new PriorityQueue<Item>((a, b) => a.priority - b.priority);
+    pq.push({ priority: 10, value: 'x' });
+    pq.push({ priority: 1, value: 'y' });
+    pq.push({ priority: 7, value: 'z' });
+    const arr = pq.toArray();
+    assert(Array.isArray(arr), 'toArray() must return array');
+    assert(
+        arr.map(i => i.value).join(',') === 'y,x,z',
+        'toArray() must return heap order, not sorted order'
+    );
+    assert(pq.len() === 3, 'Queue length unchanged after toArray()');
+    assert(pq.peek()?.value === 'y', 'Top element must remain unchanged');
+}
+
 (function main() {
     shouldHaveEmptyState();
     shouldPushAndPopBasedOnPriority();
     shouldPeekItems();
     shouldClearItems();
+    shouldRemoveItem();
+    shouldReturnArrayOfItems();
     console.log('✅ All PriorityQueue tests passed!');
 })();

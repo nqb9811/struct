@@ -10,7 +10,7 @@ const scripts = [
 });
 
 for (const script of scripts) {
-    spawn('ts-node', [script], { stdio: 'inherit' })
+    spawn('npx', ['ts-node', script], { stdio: 'inherit' })
         .on('exit', (code) => {
             if (code !== 0) {
                 console.log(`❌ Script ${script} exited with code ${code}`);

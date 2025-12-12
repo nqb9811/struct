@@ -83,6 +83,37 @@ function shouldResize() {
     assert(buf.len() === 5, 'Should have 5 items after 2 other pushes');
 }
 
+function shouldRemoveItem() {
+    const buf = new CircularBuffer<string>(5);
+    buf.push('a');
+    buf.push('b');
+    buf.push('c');
+    assert(buf.toArray().join(',') === 'a,b,c', 'Initial array should be correct');
+    assert(buf.len() === 3, 'Initial length should be 3');
+    buf.remove('b');
+    assert(buf.len() === 2, 'Length should decrease after removal');
+    assert(buf.toArray().join(',') === 'a,c', 'Should remove the matching item');
+    buf.remove('x');
+    assert(buf.toArray().join(',') === 'a,c', 'Removing non-existing item should change nothing');
+    assert(buf.len() === 2, 'Length unchanged when removing non-existing item');
+    buf.remove('a');
+    assert(buf.toArray().join(',') === 'c', 'Should remove head item correctly');
+    buf.remove('c');
+    assert(buf.isEmpty(), 'Buffer should be empty after removing all items');
+}
+
+function shouldReturnArrayOfItems() {
+    const buf = new CircularBuffer<string>(4);
+    buf.push('a');
+    buf.push('b');
+    buf.push('c');
+    assert(buf.toArray().join(',') === 'a,b,c', 'toArray should return items in order');
+    buf.pop();
+    buf.push('d');
+    buf.push('e');
+    assert(buf.toArray().join(',') === 'b,c,d,e', 'toArray should handle wrap-around properly');
+}
+
 (function main() {
     shouldHaveEmptyState();
     shouldPushItems();
@@ -90,5 +121,7 @@ function shouldResize() {
     shouldPeekItems();
     shouldClearItems();
     shouldResize();
+    shouldRemoveItem();
+    shouldReturnArrayOfItems();
     console.log('✅ All CircularBuffer tests passed!');
 })();
