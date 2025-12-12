@@ -5,6 +5,7 @@ const scripts = [
     'queue.ts',
     'circular-buffer.ts',
     'priority-queue.ts',
+    'deque.ts',
 ].map((name) => {
     return resolve(__dirname, name);
 });
